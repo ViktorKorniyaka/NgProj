@@ -1,4 +1,4 @@
-app.controller('DemoCtrl',['$scope', 'ngTableParams','$sce', function($scope, ngTableParams, $sce) {
+app.controller('Access',['$scope', 'ngTableParams','$sce', function($scope, ngTableParams, $sce) {
         var data = [{name: "Moroni", age: 50},
             {name: "Tiancum", age: 43},
             {name: "Jacob", age: 27},

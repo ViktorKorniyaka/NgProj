@@ -16,8 +16,8 @@ import java.util.Map;
 @RequestMapping("/home")
 public class MainController {
 
-    @Autowired
-    private User user;
+   /* @Autowired
+    private User user;*/
 
     @RequestMapping
     public @ResponseBody Map<String, Object> home() {
@@ -25,7 +25,7 @@ public class MainController {
         result.put("name", "Victor");
         result.put("age", 28);
         result.put("gender", "male");
-        result.put("date", user.getDate());
+        /*result.put("date", user.getDate());*/
         return result;
     }
 
