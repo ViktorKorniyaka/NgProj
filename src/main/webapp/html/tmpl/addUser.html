@@ -1,0 +1,11 @@
+<div id="popUpMsgAdd-bg" ng-show="showPopUpMsgAdd">
+    <div id="popUpMsgAdd"><div class="close" ng-click="closePopUpAdd()">x</div>
+        <div class="content">{{popUpMsgContentAdd}}<br>
+            add имя пользователя name - <input ng-model="name" class="form-control"> <br>
+            add User phone - <input ng-model="phone" class="form-control"> <br>
+            <!--<button ng-click="addUserAsJSON()" class="btn btn-primary btn-sm" style="width: 100%">add</button>-->
+            <input ng-click="addUserAsJSON()" class="btn btn-primary btn-sm" style="width: 100%" value="add">
+        </div>
+        <button ng-click="closePopUpAdd()">Ok</button>
+    </div>
+</div>

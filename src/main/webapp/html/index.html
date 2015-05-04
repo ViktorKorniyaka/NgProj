@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ng-Hello</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
+
+    <script type="text/javascript" src="/js/app.js"></script>
+    <script type="text/javascript" src="/js/OneController.js"></script>
+    <script type="text/javascript" src="/js/TwoController.js"></script>
+    <script type="text/javascript" src="/js/LoginController.js"></script>
+    <script type="text/javascript" src="/js/AccessController.js"></script>
+    <script type="text/javascript" src="/js/menuController.js"></script>
+    <script data-require="ng-table@*" data-semver="0.3.0" src="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.js"></script>
+    <script data-require="ng-table-export@0.1.0" data-semver="0.1.0" src="http://bazalt-cms.com/assets/ng-table-export/0.1.0/ng-table-export.js"></script>
+
+    <link data-require="ng-table@*" data-semver="0.3.0" rel="stylesheet" href="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.css" />
+    <style>
+        header {
+            width: 100%;
+            height: 50px;
+            background-color: #222;
+        }
+
+        header .item {
+            padding: 7px 20px;
+            display: inline-block;
+            color: #fff;
+            background-color: #333;
+        }
+
+        header .item:hover {
+            background-color: #444;
+        }
+
+    </style>
+</head>
+<body ng-app="app">
+    <header>
+        <a class="item" href="#/one">First</a>
+        <a class="item" href="#/two">Secon</a>
+        <a class="item" href="#/login">login</a>
+        <a class="item" href="#/access">access</a>
+        <a class="item" href="#/menu">menu</a>
+    </header>
+    <div ng-view></div>
+</body>
+</html>

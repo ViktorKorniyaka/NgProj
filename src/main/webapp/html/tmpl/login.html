@@ -1,0 +1,99 @@
+<html>
+<head>
+    <title>Ng-Hello</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
+
+    <script>
+        var app2 = angular.module('app2', ['ngRoute']);
+
+        app2.config(['$routeProvider', function ($routeProvider) {
+
+            $routeProvider.when('/login', {
+                templateUrl: '/html/tmpl/login.html',
+                controller: 'Login'
+            });
+
+            $routeProvider.otherwise({redirectTo: '/login'});
+        }]);
+
+
+        app2.controller('Login', ['$scope', '$http', function ($scope, $http, $location) {
+            $scope.login = 'login and login login';
+            $scope.go = function(){
+                $scope.goiswork = 'goiswork';
+                /*$location.absUrl('/two');*/
+                window.location.href =  '/#/two';
+
+
+            };
+            $scope.sign = function() {
+                $scope.goiswork = 'goiswork';
+                var dataObj = {
+                    login : $scope.login,
+                    password : $scope.password
+                };
+
+                $http.post('/rest/admin/authenticated', dataObj)
+                        .success(function(data) {
+                            if(data == 'ok'){
+                                window.location.href =  '/#/two';
+                                $scope.mess = data;
+                            } else{
+                                window.location.href =  '/#/login';
+                                $scope.mess = data;
+                            }
+                            /*почему то в ответ нет - ответа*/
+
+                        })
+                        .error(function(data, status, headers, config) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            $scope.mess = 'field error -  '+data;
+                        });
+
+            };
+            /*$scope.load = function() {
+             $http.get("/rest/home")
+             .success(function (data) {
+             $scope.res = data;
+             });
+             }*/
+
+
+        }]);
+    </script>
+
+    <style>
+        header {
+            width: 100%;
+            height: 50px;
+            background-color: #222;
+        }
+
+        header .item {
+            padding: 7px 20px;
+            display: inline-block;
+            color: #fff;
+            background-color: #333;
+        }
+
+        header .item:hover {
+            background-color: #444;
+        }
+
+    </style>
+</head>
+<body ng-app="app2">
+<div ng-controller="Login">
+    <input ng-model="login" />
+    <input ng-model="password"/>
+    <a ng-click="sign()">sign()</a>
+    {{login}}
+    {{goiswork}}
+    {{mess}}
+    {{ok}}
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<div id="popUpMsgEdit-bg" ng-show="showPopUpMsgEdit">
+    <div id="popUpMsgEdit"><div class="close" ng-click="closePopUpEdit()">x</div>
+        <div class="content">{{popUpMsgContentEdit}}<br>
+            nameUser - <input ng-model="nameUser" class="form-control"> <br>
+            phoneUser - <input ng-model="phoneUser" class="form-control"> <br>
+            <!--<button ng-click="editUserAsJSON()" class="btn btn-primary btn-sm" style="width: 100%">edit</button>-->
+            <input ng-click="editUserAsJSON()" class="btn btn-primary btn-sm" style="width: 100%" value="edit">
+        </div>
+        <button ng-click="closePopUpEdit()">Ok</button>
+    </div>
+</div>

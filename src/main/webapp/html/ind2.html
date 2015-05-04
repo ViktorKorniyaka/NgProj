@@ -1,0 +1,305 @@
+<!doctype html>
+<html ng-app="CounterApp">
+<head>
+    <title>Example - www.code-sample.com</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.1/angular.min.js"></script>
+    <script>
+        angular.module('CounterApp', [])
+                .directive('popUpMsgEdit', function(){
+                    return {
+                        restrict: 'E',
+                        scope: false,
+                        templateUrl: '/html/tmpl/editUser.html',
+                        controller: function($scope) {
+                            $scope.closePopUpEdit = function(){
+                                $scope.showPopUpMsgEdit = false;
+                            }
+                        }
+                    }
+                })
+                .directive('popUpMsgAdd', function(){
+                    return {
+                        restrict: 'E',
+                        scope: false,
+                        templateUrl: '/html/tmpl/addUser.html',
+                        controller: function($scope) {
+                            $scope.closePopUpAdd = function(){
+                                $scope.showPopUpMsgAdd = false;
+                            }
+                        }
+                    }
+                })
+                .controller('CounterController', ['$scope','$http','$filter', function ($scope,$http,$filter) {
+                    $scope.showPopUpMsgEdit = false;
+                    $scope.openPopUpEdit = function( text ) {
+                        $scope.showPopUpMsgEdit = true;
+                        $scope.popUpMsgContentEdit = text;
+                    }
+                    $scope.showPopUpMsgAdd = false;
+                    $scope.openPopUpAdd = function( text ) {
+                        $scope.showPopUpMsgAdd = true;
+                        $scope.popUpMsgContentAdd = text;
+                    }
+                    /*$scope.CounterRows = res;*//*[
+                        { name: 'Row1', web: 'www.code-sample.com' },
+                        { name: 'Row2', web: 'www.code-sample.net' },
+                        { name: 'Row3', web: 'www.code-sample.in' },
+                        { name: 'Row4', web: 'www.code-sample.co.in' },
+                        { name: 'Row5', web: 'www.code-sample.org' }];*/
+                    $scope.editRows = function (index) {
+                        $scope.nameUser = $scope.CounterRows[index].name;
+                        $scope.phoneUser = $scope.CounterRows[index].phone;
+                        /*$scope.CounterRows.splice(index, 1);
+
+                        $scope.addUserAsJSON($scope.CounterRows[index]);*/
+                        $scope.indexUser = index;
+                        $scope.openPopUpEdit('Edit User');
+                    };
+                    $scope.editUserAsJSON = function(){
+                        var dataObj = {
+                            name : $scope.nameUser,
+                            phone : $scope.phoneUser
+                        };
+                        var res = $http.post('/rest/admin/editUser', dataObj);
+                        res.success(function(data, status, headers, config) {
+                            $scope.message = data;
+                        });
+                        /*res.error(function(data, status, headers, config) {
+                         alert( "failure message: " + JSON.stringify({data: data}));
+                         $scope.message = 'failure message: -' + data;
+                         });*/
+                        // Making the fields empty
+                        //
+                         $scope.CounterRows[$scope.indexUser].name = $scope.nameUser;
+                         $scope.CounterRows[$scope.indexUser].phone = $scope.phoneUser;
+
+                        $scope.nameUser='';
+                        $scope.phoneUser='';
+                        $scope.indexUser ='';
+                        $scope.showPopUpMsgEdit = false;
+                    };
+                    $scope.deleteRows = function (index) {
+                        $scope.deleteUserAsJSON($scope.CounterRows[index]);
+                        $scope.CounterRows.splice(index, 1);
+
+                    };
+                    $scope.deleteUserAsJSON = function(objData){
+                        var dataObj = {
+                            name : objData.name,
+                            phone : objData.phone
+                        };
+                        var res = $http.post('/rest/admin/deleteUser', dataObj);
+                        res.success(function(data, status, headers, config) {
+                            $scope.message = data;
+                        });
+                        /*res.error(function(data, status, headers, config) {
+                         alert( "failure message: " + JSON.stringify({data: data}));
+                         $scope.message = 'failure message: -' + data;
+                         });*/
+                        // Making the fields empty
+                        //
+                        /*$scope.login='';
+                        $scope.password='';
+                        $scope.showPopUpMsg = false;*/
+                    };
+                    /*var res = $http.get('/rest/admin/loadOrganization');
+                    res.success(function(data, status, headers, config) {
+                        $scope.message = data;
+                    });*/
+                    $scope.load = function() {
+                        $http.get("/rest/admin/loadOrganization")
+                                .success(function (data) {
+                                    /*$scope.res = data;*/
+                                    $scope.CounterRows = data;
+                                });
+                    }
+                    $scope.addUserRows = function () {
+                        /*if($scope.CounterRows === null){
+                            $scope.load();
+                        } else{
+
+                        }
+                        if($scope.CounterRows.length === 0){
+                            $scope.load();
+                        }*/
+                          $scope.CounterRows.push({ name: $scope.name, phone: $scope.phone });
+                    }
+                    $scope.addUserAsJSON = function(){
+                        var dataObj = {
+                            name : $scope.name,
+                            phone : $scope.phone
+                        };
+                        var res = $http.post('/rest/admin/addUser', dataObj);
+                        res.success(function(data, status, headers, config) {
+                            $scope.message = data;
+                        });
+                        /*res.error(function(data, status, headers, config) {
+                         alert( "failure message: " + JSON.stringify({data: data}));
+                         $scope.message = 'failure message: -' + data;
+                         });*/
+                        // Making the fields empty
+                        //
+                       $scope.addUserRows();
+                        $scope.name='';
+                        $scope.phone='';
+                        $scope.showPopUpMsgAdd = false;
+                    };
+                    /* ************ для сортировки **************** */
+                    var orderBy = $filter('orderBy');
+                    $scope.order = function(predicate, reverse) {
+                        $scope.CounterRows = orderBy($scope.CounterRows, predicate, reverse);
+                    };
+                    $scope.order('-name',false);
+                }]);
+    </script>
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        #popUpMsgEdit-bg {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        #popUpMsgEdit {
+            top: 10%;
+            left: 50%;
+            margin-left: -150px;
+            width: 300px;
+            padding: 10px 5px;
+            background: white;
+            border-radius: 5px;
+            position: absolute;
+        }
+
+        #popUpMsgEdit .close {
+            background: black;
+            color: white;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            top: -6px;
+            right: -7px;
+        }
+
+        #popUpMsgEdit .content {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #popUpMsgEdit button {
+            display: block;
+            margin: 0 auto;
+            border-radius: 3px;
+            border: 0;
+            background: lightgray;
+            padding: 5px 20px;
+            cursor: pointer;
+        }
+        /*************** ADD window ******************/
+        #popUpMsgAdd-bg {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        #popUpMsgAdd {
+            top: 10%;
+            left: 50%;
+            margin-left: -150px;
+            width: 400px;
+            padding: 10px 5px;
+            background: white;
+            border-radius: 5px;
+            position: absolute;
+        }
+
+        #popUpMsgAdd .close {
+            background: black;
+            color: white;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            top: -6px;
+            right: -7px;
+        }
+
+        #popUpMsgAdd .content {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #popUpMsgAdd button {
+            display: block;
+            margin: 0 auto;
+            border-radius: 3px;
+            border: 0;
+            background: lightgray;
+            padding: 5px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body ng-controller="CounterController">
+<div ng-repeat="row in CounterRows">
+    <div>{{$index}} :  {{row.name}} {{row.phone}} <input type="button" value="delete" ng-click="deleteRows($index)" /><input type="button" value="edit" ng-click="editRows($index)" /></div>
+</div>
+
+<a ng-click="load()">load()</a><br>
+nameUser - <input ng-model="nameUser"> <br>
+phoneUser - <input ng-model="phoneUser"> <br>
+<input ng-click="editUser()">
+<button ng-click="openPopUpEdit('Edit User')">show message</button>
+
+<pop-up-msg-edit></pop-up-msg-edit>
+<br>
+<button class="btn btn-primary btn-sm disabled" ng-click="openPopUpAdd('Add User')">add User Button</button>
+<button class="btn btn-primary btn-sm" ng-click="openPopUpAdd('Add User')">add User Button</button>
+<pop-up-msg-add></pop-up-msg-add>
+<br>фильтр - <input ng-model="filterAll">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th ><a href="" ng-click="reverse=false;order('name', false)">name</a>
+                (<a href="" ng-click="order('-name',false)">^</a>)</th>
+            <th><a href=""  ng-click="reverse=!reverse;order('phone', reverse)">phone</a></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in CounterRows | filter:filterAll">
+            <td>{{$index}}</td>
+            <td>{{row.name}}</td>
+            <td>{{row.phone}}</td>
+            <td><input type="button" class="btn btn-primary btn-xs" value="edit" ng-click="editRows($index)" />
+                <input type="button" class="btn btn-danger btn-xs"  value="delete" ng-click="deleteRows($index)" />
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://xmlns.oracle.com/weblogic/weblogic-web-app http://xmlns.oracle.com/weblogic/weblogic-web-app/1.0/weblogic-web-app.xsd">
+    <context-root>/</context-root>
+    <jsp-descriptor>
+        <keepgenerated>true</keepgenerated>
+        <debug>true</debug>
+    </jsp-descriptor>
+
+</weblogic-web-app>
+        <!-- <servlet-descriptor>
+                <servlet-name>dispatcher</servlet-name>
+            </servlet-descriptor>
+            <servlet-descriptor>
+                <servlet-name>listenerSpring</servlet-name>
+            </servlet-descriptor>-->
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd
+                  http://xmlns.oracle.com/weblogic/weblogic-web-app
+                  http://xmlns.oracle.com/weblogic/weblogic-web-app/1.0/weblogic-web-app.xsd">
+    <jsp-descriptor>
+        <keepgenerated>true</keepgenerated>
+        <debug>true</debug>
+    </jsp-descriptor>
+    <context-root>/</context-root>
+    <component-factory-class-name>org.springframework.jee.interfaces.SpringComponentFactory</component-factory-class-name>
+    &lt;!&ndash;<library-ref>
+        <library-name>spring-webmvc</library-name>
+        <specification-version>4.0.2.RELEASE</specification-version>
+    </library-ref>
+    <library-ref>
+        <library-name>spring-core</library-name>
+        <specification-version>4.0.2.RELEASE</specification-version>
+    </library-ref>
+    <library-ref>
+        <library-name>spring-web</library-name>
+        <specification-version>4.0.2.RELEASE</specification-version>
+    </library-ref>&ndash;&gt;
+
+    <container-descriptor>
+        <prefer-web-inf-classes>false</prefer-web-inf-classes>
+        <prefer-application-packages>
+            <package-name>org.springframework.*</package-name>
+        </prefer-application-packages>
+
+    </container-descriptor>
+</weblogic-web-app>-->
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd
+                  http://xmlns.oracle.com/weblogic/weblogic-web-app
+                  http://xmlns.oracle.com/weblogic/weblogic-web-app/1.0/weblogic-web-app.xsd">
+    <jsp-descriptor>
+        <keepgenerated>true</keepgenerated>
+        <debug>true</debug>
+    </jsp-descriptor>
+    &lt;!&ndash;<context-root>/</context-root>&ndash;&gt;
+    <fast-swap>
+        <enabled>false</enabled>
+    </fast-swap>
+
+    &lt;!&ndash;<library-ref>
+        <library-name>spring-webmvc</library-name>
+        <specification-version>4.0.2.RELEASE</specification-version>
+    </library-ref>
+    <library-ref>
+        <library-name>spring-core</library-name>
+        <specification-version>4.0.2.RELEASE</specification-version>
+    </library-ref>
+    <library-ref>
+        <library-name>spring-web</library-name>
+        <specification-version>4.0.2.RELEASE</specification-version>
+    </library-ref>&ndash;&gt;
+</weblogic-web-app>
+-->
+

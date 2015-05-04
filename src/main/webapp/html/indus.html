@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Example - example-example53-production</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+</head>
+<body ng-controller="MainCtrl">
+
+
+<h1>Editable Table</h1>
+<table id="searchObjResults">
+    <tr><th ng-click="sort('name')">Name</th><th ng-click="sort('phone')">Phone</th></tr>
+    <tr><td><input ng-model="search.name"></td><td><input ng-model="search.phone"></td></tr>
+    <tr ng-repeat="friendObj in users | orderBy:orderProp:direction| filter:search:strict" ng-class-odd="'odd'">
+
+        <td click-to-edit="friendObj" type="tbl"></td>
+    </tr>
+</table>
+
+
+<h1>Selected View</h1>
+<ul>
+    <li ng-repeat="user in users" ng-class="{active: checkActive(user)}" ng-click="select(user)">{{user.name}}</li>
+</ul>
+<p>selected: {{selectedUser.phone}}</p>
+<p click-to-edit="selectedUser.name"></p>
+<p click-to-edit="selectedUser.phone"></p>
+<script>
+
+    var myApp = angular.module('myApp', []);
+    //myApp.by.id('setbtn')element('h1').addClass('active');
+
+    myApp.controller('MainCtrl', ['$scope','$filter','$http', function ($scope,$filter,$http) {
+        var entity =   $scope.loadOrganization();
+        $scope.users =
+            $http.get("/rest/admin/loadOrganization")
+                    .success(function (data) {
+                        $scope.res = data;
+                    });
+        /*[{name:'John', phone:'555-1276'},
+            {name:'John', phone:'555-1278'},
+            {name:'Mary', phone:'800-BIG-MARY'},
+            {name:'Mike', phone:'555-4321'},
+            {name:'Adam', phone:'555-5678'},
+            {name:'Julie', phone:'555-8765'},
+            {name:'Juliette', phone:'555-5678'}];*/
+
+        $scope.loadOrganization = function() {
+            $http.get("/rest/admin/loadOrganization")
+                    .success(function (data) {
+                        $scope.res = data;
+                    });
+        };
+        //setting for order
+        $scope.users = $filter('orderBy')($scope.users, 'name');
+
+        //to set the defalult search
+        //$scope.search = {
+        //phone : "555-1278"
+        //};
+        //sorting
+        $scope.direction = false;
+        $scope.orderProp = "name";
+        $scope.sort = function(column) {
+            if ($scope.orderProp === column) {
+                $scope.direction = !$scope.direction;
+            } else {
+                $scope.orderProp = column;
+                $scope.direction = false;
+            }
+        };
+        //selected when list click
+        $scope.select = function(user) {
+            $scope.selectedUser = user;
+        };
+        //applying the selected Class
+        $scope.checkActive = function(user) {
+            return $scope.selectedUser == user;
+        };
+        //set the first item as selected
+        //$scope.select($scope.users[0]);
+        $scope.selectedUser = $scope.users[0];
+
+
+    }]);
+    myApp.directive("clickToEdit", function() {
+        var editorTemplate = '<td class="click-to-edit">' +
+                '<div ng-hide="view.editorEnabled">' +
+                '{{value.name}} ' +
+                '{{value.phone}} ' +
+                '<a href="#" ng-click="enableEditor()">Edit</a>' +
+                '</div>' +
+                '<div ng-show="view.editorEnabled">' +
+                '<input ng-model="view.editableValue.name">' +
+                '<input ng-model="view.editableValue.phone">' +
+                '<a href="#" ng-click="save()">Save</a>' +
+                ' or ' +
+                '<a href="#" ng-click="disableEditor()">cancel</a>.' +
+                '</div>' +
+                '</td>';
+        var editorTemplate1 = '<div class="click-to-edit">' +
+                '<div ng-hide="view.editorEnabled">' +
+                '{{value}} ' +
+                '<a href="#" ng-click="enableEditor()">Edit</a>' +
+                '</div>' +
+                '<div ng-show="view.editorEnabled">' +
+                '<input ng-model="view.editableValue">' +
+                '<a href="#" ng-click="save()">Save</a>' +
+                ' or ' +
+                '<a href="#" ng-click="disableEditor()">cancel</a>.' +
+                '</div>' +
+                '</div>';
+
+        return {
+            restrict: "A",
+            replace: true,
+            //template: editorTemplate,
+            template: function(element, attrs) {
+                if(attrs.type=='tbl'){
+                    return editorTemplate;
+                }
+                else{
+                    return editorTemplate1;
+                }
+            },
+            scope: {
+                value: "=clickToEdit",
+            },
+            link: function(scope, element, attrs) {
+                //alert(element);
+            },
+            controller: function($scope) {
+                $scope.view = {
+                    editableValue: $scope.value,
+                    editorEnabled: false
+                };
+
+                $scope.enableEditor = function() {
+                    $scope.view.editorEnabled = true;
+                    $scope.view.editableValue = $scope.value;
+                };
+
+                $scope.disableEditor = function() {
+                    $scope.view.editorEnabled = false;
+                };
+
+                $scope.save = function() {
+                    $scope.value = $scope.view.editableValue;
+                    $scope.disableEditor();
+                };
+            }
+        };
+    });
+
+
+
+</script>
+<style>
+    .active{color:green}
+</style>
+</body>
+</html>
